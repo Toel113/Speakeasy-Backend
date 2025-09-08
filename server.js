@@ -11,10 +11,16 @@ const app = express();
 const port = 5000;  // local
 // const port = 6000;  // server
 
-app.use(cors({}));
+app.use(cors({
+  origin: 'https://speakeasy-th.netlify.app', // ใส่ URL ของ frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(morgan('dev'));
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(express.json());
+
+
 
 // ฟังก์ชันหาค่า IP ของเครื่องใน network
 function getLocalIP() {
