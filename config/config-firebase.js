@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT);
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 let db, auth, bucket;
 
