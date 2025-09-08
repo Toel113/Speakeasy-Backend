@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("./seak-easy-firebase-adminsdk-fbsvc-89914736da.json");
+const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 let db, auth, bucket;
 
