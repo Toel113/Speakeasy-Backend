@@ -8,7 +8,7 @@ const os = require('os');
 const { connectDB } = require('./config/config-firebase');
 
 const app = express();
-const port = 3000;  // local
+const port = 5000;  // local
 // const port = 6000;  // server
 
 app.use(cors({}));
