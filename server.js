@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -11,16 +12,16 @@ const app = express();
 const port = 5000;  // local
 // const port = 6000;  // server
 
+// CORS: รองรับ local dev และ frontend จริง
 app.use(cors({
-  origin: 'https://speakeasy-th.netlify.app', // ใส่ URL ของ frontend
+  origin: ['https://speakeasy-th.netlify.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 app.use(morgan('dev'));
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(express.json());
-
-
 
 // ฟังก์ชันหาค่า IP ของเครื่องใน network
 function getLocalIP() {
@@ -35,7 +36,7 @@ function getLocalIP() {
   return 'localhost';
 }
 
-// Connect to the database
+// Connect to Firebase Admin
 connectDB()
   .then(() => {
     const routesPath = path.join(__dirname, 'routes');
@@ -50,7 +51,7 @@ connectDB()
       process.exit(1);
     }
 
-    // Start the server
+    // Start server
     app.listen(port, '0.0.0.0', () => {
       const ip = getLocalIP();
       console.log(`\n🚀 Server is running at:`);

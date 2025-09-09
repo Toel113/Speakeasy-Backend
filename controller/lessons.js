@@ -63,8 +63,6 @@ exports.setSentences = async (req, res) => {
         });
 
 
-
-
         res.status(200).json({ message: "Sentence added successfully" });
     } catch (error) {
         console.error("Error setting sentence:", error);
@@ -120,23 +118,30 @@ exports.setExamScore = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // ได้ docRef ของ user
         const userDoc = snapshot.docs[0].ref;
 
-        // update achievement ตาม category
-        await userDoc.update(
-            {
-                achievement: {
-                    [category]: {
-                        score: score,
-                        updatedAt: new Date(),
-                    },
-                },
-            },
-            { merge: true } // จะไม่ทับทั้ง document แต่ merge เข้าไป
-        );
+        // ดึงข้อมูลเดิม
+        const data = (await userDoc.get()).data();
 
-        return res.status(200).json({ message: "Score updated successfully" });
+        let achievement = data.achievement || [{}]; // ถ้าไม่มี ให้สร้าง array กับ object เปล่า
+        achievement[0] = achievement[0] || {};
+
+        // อัปเดตเฉพาะ category ที่ต้องการ
+        achievement[0][category] = {
+            ...achievement[0][category], // เก็บข้อมูลเดิมของ category นี้
+            score: score,
+            updatedAt: new Date()
+        };
+
+        // อัปเดตกลับไป
+        await userDoc.update({ achievement });
+
+        return res.status(200).json({
+            message: "Score updated successfully",
+            email,
+            category,
+            score
+        });
     } catch (error) {
         console.error("Error setting exam score", error);
         return res.status(500).json({ error: error.message });
