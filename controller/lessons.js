@@ -147,3 +147,30 @@ exports.setExamScore = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
+
+
+exports.setExam = async (req, res) => {
+    try {
+        const { docname, Question, Choices, Answer } = req.body;
+
+        // ตรวจสอบว่ามีค่าครบหรือไม่
+        if (!docname || !Question || !Choices || !Answer) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const docRef = db.collection("Lessons").doc(docname);
+
+        await docRef.update({
+            Exam: admin.firestore.FieldValue.arrayUnion({
+                Question,
+                Choices,
+                Answer
+            }),
+        });
+
+        res.status(200).json({ message: "Exam added successfully" });
+    } catch (error) {
+        console.error("Error setting exam:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};

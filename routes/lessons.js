@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllCategory, setVocabulary, setSentences, setListening, getDataCategory, setExamScore } = require('../controller/lessons');
+const { getAllCategory, setVocabulary, setSentences, setListening, getDataCategory, setExamScore, setExam } = require('../controller/lessons');
 
 router.post('/lessons/getAllCategory', getAllCategory);
 
@@ -14,5 +14,7 @@ router.post('/setlessons/setListening', setListening);
 router.post('/getLessons/getDataCategory', getDataCategory);
 
 router.post('/setExam/setExamScore', setExamScore);
+
+router.post('/setExam/setExam', setExam);
 
 module.exports = router;
